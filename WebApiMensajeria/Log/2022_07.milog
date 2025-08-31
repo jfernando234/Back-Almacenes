@@ -1,0 +1,4 @@
+--->19/07/2022 02:13:30 PM Service/CorreoSER/Identificador:210db887-c067-4145-b3a9-3b9347f5b2b5, enviar correo/Object reference not set to an instance of an object.
+--->19/07/2022 02:16:13 PM Service/CorreoSER/Identificador:2992a0bf-7d22-48bb-9d77-943e1d7af5ac, enviar correo/Object reference not set to an instance of an object.
+--->21/07/2022 04:07:40 PM Service/CorreoSER/Identificador:ed455576-9b36-499b-b15f-50ab963ecc73, enviar correo/The parameter 'addresses' cannot be an empty string. (Parameter 'addresses')
+--->21/07/2022 04:08:31 PM Service/CorreoSER/Identificador:cc094217-59e0-4d64-81d1-2f6d0fa88af7, enviar correo/The parameter 'addresses' cannot be an empty string. (Parameter 'addresses')

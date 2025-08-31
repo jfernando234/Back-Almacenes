@@ -1,0 +1,58 @@
+
+*.exe
+*.zip
+*.log
+
+# --- Ignorar carpetas de compilación en todos los proyectos ---
+**/bin/
+**/obj/
+
+# --- Ignorar archivos de usuario y configuración de IDE ---
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Ignorar archivos temporales y de logs ---
+*.log
+*.tmp
+*.temp
+
+# --- Ignorar archivos de publicación ---
+publish/
+out/
+
+# --- Ignorar paquetes descargados por npm o LibMan (si aplica) ---
+**/node_modules/
+**/wwwroot/lib/
+
+# --- Ignorar configuración de JetBrains Rider (si usas) ---
+.idea/
+
+# --- Ignorar archivos de backup ---
+*.bak
+*.old
+*.orig
+
+# --- Ignorar archivos generados por Visual Studio Code ---
+.vscode/
+
+
+# --- Ignorar librerías externas pesadas y frameworks nativos ---
+*.dll
+*.so
+*.dylib
+*.a
+*.lib
+*.nupkg
+
+# --- Ignorar librerías nativas de ONNX Runtime ---
+**/onnxruntime.framework/
+**/onnxruntime.xcframework/
+
+# --- Ignorar configuraciones de publicación ---
+**/Properties/PublishProfiles/
+
+
+# --- Fin del .gitignore ---

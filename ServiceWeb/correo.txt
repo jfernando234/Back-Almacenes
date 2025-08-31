@@ -1,0 +1,22 @@
+﻿  Dim strMensaje As String = ""
+            strMensaje = "Cuenta de usuario; " & "<br>" & "<br>" & Chr(13) & Chr(13)
+            'strMensaje = strMensaje & "Login : " & strLogin & "<br>"
+            strMensaje = strMensaje & "Nro. Documento: " & strNumDoc & "<br>" & Chr(13)
+            strMensaje = strMensaje & "Apellido Paterno: " & strApePat.ToUpper & "<br>" & Chr(13)
+            strMensaje = strMensaje & "Apellido Materno: " & strApeMat.ToUpper & "<br>" & Chr(13)
+            strMensaje = strMensaje & "Nombres: " & strNombres.ToUpper & "<br>" & "<br>" & Chr(13) & Chr(13)
+            strMensaje = strMensaje & "Para efectos de ingresar (login) a los sistemas SIP, ingresar los siguientes datos; " & "<br>" & Chr(13)
+            strMensaje = strMensaje & "Usuario:" & strLogin.ToUpper & "<br>" & Chr(13)
+            strMensaje = strMensaje & "Clave: Es igual que el usuario (pero en mayuscula, todo seguido)" & "<br>" & "<br>" & Chr(13) & Chr(13)
+            strMensaje = strMensaje & "Por motivos de seguridad, usted debe cambiar su clave inicial y realizar el mantenimiento de cambio de clave frecuentemente."
+
+            If chkAdjunto.Checked = True Then
+                strMensaje = strMensaje & "<br>" & "<br>" & Chr(13) & Chr(13)
+                strMensaje = strMensaje & "Nota: Si su usuario pertenece al Penal o Region, debe replicar los permisos de los usuarios. Para ello debe ver los pasos que "
+                strMensaje = strMensaje & "figuran en el archivo adjunto. No olvide que cuando haga clic en la opcion [Actualizar usuario], debe esperar el proceso y un "
+                strMensaje = strMensaje & "mensaje indicando [Operacion realizada satisfactoriamente], para que pueda ingresar al sistema."
+
+                Me.txtPathArchivo.Text = "D:\Desarrollo\DEV\SIP_POPE\Doc\replicar_usuario.png"
+            Else
+                Me.txtPathArchivo.Text = ""
+            End If
