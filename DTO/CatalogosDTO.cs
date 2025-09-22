@@ -21,7 +21,9 @@ namespace DTO
         public string message { get; set; }
         public string ruc { get; set; }
         public string razonSocial { get; set; }
-    // nombreComercial eliminado según el cambio de esquema
+
+
+   
         public string estado { get; set; }
         public string condicion { get; set; }
 
