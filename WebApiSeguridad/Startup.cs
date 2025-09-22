@@ -32,7 +32,8 @@ namespace WebApiSeguridad
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new AutomapperHelper());
+                // Use the MappingProfile defined in the WebApiSeguridad project
+                mc.AddProfile(new MappingProfile());
             });
 
             FluentMapper.Initialize(config =>
@@ -44,6 +45,7 @@ namespace WebApiSeguridad
                 config.AddMap(new UsuarioMAP());                                
                 config.AddMap(new UsuarioPerfilMAP());
                 config.AddMap(new ClienteMAP());
+                config.AddMap(new ProveedorMAP());
                 //config.AddMap(new UsuarioRolMAP());
             });
 

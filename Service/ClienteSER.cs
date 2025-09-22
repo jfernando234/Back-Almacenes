@@ -18,7 +18,6 @@ namespace Service
         {
             _configuration = configuration;
             _mapper = mapper;
-            // Usar la misma clave que está en appsettings.json
             cnBD = _configuration.GetConnectionString("cn_bd_sige");
         }
 
@@ -28,7 +27,6 @@ namespace Service
             {
                 var clienteDA = new ClienteDA(cnBD);
                 var listaEntity = clienteDA.listarAll();
-                // Mapear a DTO para no exponer campos de auditoría
                 var listaDto = _mapper.Map<List<DTO.ClienteListarDTO>>(listaEntity);
                 return listaDto;
             }
@@ -63,14 +61,11 @@ namespace Service
         {
             try
             {
-                // Validar que no exista el documento
                 var clienteDA = new ClienteDA(cnBD);
                 if (clienteDA.existeDocumento(clienteDTO.idTipoDocumento, clienteDTO.numeroDocumento))
                 {
                     throw new Exception("Ya existe un cliente con este tipo y número de documento");
                 }
-
-                // Mapear DTO a Entity
                 var clienteBE = _mapper.Map<ClienteBE>(clienteDTO);
                 
                 return clienteDA.agregar(clienteBE);
@@ -90,20 +85,17 @@ namespace Service
 
                 var clienteDA = new ClienteDA(cnBD);
                 
-                // Verificar que existe el cliente
                 var clienteExistente = clienteDA.listar(clienteDTO.idCliente);
                 if (clienteExistente == null)
                 {
                     throw new Exception("Cliente no encontrado");
                 }
 
-                // Validar que no exista otro cliente con el mismo documento
                 if (clienteDA.existeDocumento(clienteDTO.idTipoDocumento, clienteDTO.numeroDocumento, clienteDTO.idCliente))
                 {
                     throw new Exception("Ya existe otro cliente con este tipo y número de documento");
                 }
 
-                // Mapear DTO a Entity
                 var clienteBE = _mapper.Map<ClienteBE>(clienteDTO);
                 
                 return clienteDA.modificar(clienteBE);
@@ -123,14 +115,11 @@ namespace Service
 
                 var clienteDA = new ClienteDA(cnBD);
                 
-                // Verificar que existe el cliente
-                var clienteExistente = clienteDA.listar(id);
-                if (clienteExistente == null)
+                if (!clienteDA.existeClientePorId(id))
                 {
                     throw new Exception("Cliente no encontrado");
                 }
 
-                // Crear entidad para deshabilitar
                 var clienteBE = new ClienteBE
                 {
                     idCliente = id,

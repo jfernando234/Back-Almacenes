@@ -31,9 +31,7 @@ namespace Data
                 {
                     sqlCn.Open();
                     var lista = sqlCn.Query<Entity.ClienteBE>(sqlQuery).ToList();
-                    
-                    // No rellenar estadoTexto aquí: se eliminó del DTO de listado para evitar exponer texto derivado
-                    
+                    // No rellenar estadoTexto aquí: se eliminó del DTO de listado para evitar exponer texto derivado            
                     return lista;
                 }
                 catch (Exception ex)
@@ -53,19 +51,21 @@ namespace Data
                       "t.abrev_c as tipoDocumentoAbrev, " +
                       "CASE WHEN c.estado = 1 THEN 'Activo' ELSE 'Inactivo' END as estadoTexto " +
                       "FROM " + bdEsquema + bdTabla + " c " +
-                      "INNER JOIN tipodocumento_mae t ON c.fk_tip_doc_id = t.pk_tip_doc_id " +
+                      "LEFT JOIN tipodocumento_mae t ON c.fk_tip_doc_id = t.pk_tip_doc_id " +
                       "WHERE c.pk_cli_id = @id AND c.aud_es_eli_b = 0";
 
-            Entity.ClienteBE value;
+            Entity.ClienteBE value = null;
 
             using (SqlConnection sqlCn = new SqlConnection(this.cnBD))
             {
                 try
                 {
-                    value = sqlCn.QuerySingle<Entity.ClienteBE>(sqlQuery, new { id = id });
+                    value = sqlCn.QuerySingleOrDefault<Entity.ClienteBE>(sqlQuery, new { id = id });
                 }
-                catch
+                catch (Exception ex)
                 {
+                    System.Console.WriteLine($"Error en ClienteDA.listar(): {ex.Message}");
+                    System.Console.WriteLine($"Query: {sqlQuery}");
                     value = null;
                 }
 
@@ -198,6 +198,16 @@ namespace Data
             }
         }
 
+        public bool existeClientePorId(int idCliente)
+        {
+            sqlQuery = "SELECT COUNT(*) FROM " + bdEsquema + bdTabla + " WHERE pk_cli_id = @id AND aud_es_eli_b = 0";
+            using (SqlConnection sqlCn = new SqlConnection(this.cnBD))
+            {
+                var count = sqlCn.QuerySingle<int>(sqlQuery, new { id = idCliente });
+                return count > 0;
+            }
+        }
+
         public List<Entity.ClienteBE> filtro(DateTime? inicio, DateTime? fin, string nombre)
         {
             var whereClauses = new List<string>();
@@ -214,7 +224,6 @@ namespace Data
 
             if (!string.IsNullOrWhiteSpace(nombre))
             {
-                // El filtro por 'nombre' debe aplicarse sobre la columna 'contacto'
                 whereClauses.Add("contacto LIKE @nombre");
                 parameters.Add("nombre", "%" + nombre + "%");
             }
@@ -227,9 +236,6 @@ namespace Data
                 {
                     sqlCn.Open();
                     var lista = sqlCn.Query<Entity.ClienteBE>(sqlQuery, parameters).ToList();
-
-                    // No rellenar estadoTexto aquí: se eliminó del DTO de listado para evitar exponer texto derivado
-
                     return lista;
                 }
                 catch (Exception ex)
