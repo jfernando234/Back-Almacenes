@@ -48,6 +48,13 @@ namespace WebApiSeguridad
 
             CreateMap<UsuarioRolBE, UsuarioRolDTO>();
             CreateMap<UsuarioRolBE, UsuarioRolNuevoDTO>().ReverseMap();
+
+            // Mapeos para Cliente
+            CreateMap<ClienteBE, ClienteListarDTO>()
+                .ForMember(dest => dest.fechaCreacion, opt => opt.MapFrom(src => src.fechaCreacion))
+                .ForMember(dest => dest.estadoTexto, opt => opt.MapFrom(src => src.estadoTexto));
+            CreateMap<ClienteAgregarDTO, ClienteBE>();
+            CreateMap<ClienteModificarDTO, ClienteBE>();
             CreateMap<UsuarioRolDetBE, UsuarioRolDetDTO>().ReverseMap();
             CreateMap<UsuarioRolAgregarDTO, UsuarioRolBE>();
             CreateMap<UsuarioRolModificarDTO, UsuarioRolBE>();
@@ -69,6 +76,12 @@ namespace WebApiSeguridad
             
 
             CreateMap<dashboardClienteBE, dashboardClienteDTO>().ReverseMap();
+
+            // Cliente mappings
+            CreateMap<ClienteAgregarDTO, ClienteBE>();
+            CreateMap<ClienteModificarDTO, ClienteBE>();
+            CreateMap<ClienteBE, ClienteAgregarDTO>();
+            CreateMap<ClienteBE, ClienteModificarDTO>();
 
         }
 
