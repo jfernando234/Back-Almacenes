@@ -18,7 +18,7 @@ namespace Data
             this.cnBD = cnBD;
         }
 
-    public List<Entity.ClienteBE> listar()
+    public List<Entity.ClienteBE> listarAll()
         {
 
             sqlQuery = "SELECT * FROM " + bdEsquema + bdTabla + " " +
@@ -32,16 +32,13 @@ namespace Data
                     sqlCn.Open();
                     var lista = sqlCn.Query<Entity.ClienteBE>(sqlQuery).ToList();
                     
-                    foreach (var cliente in lista)
-                    {
-                        cliente.estadoTexto = cliente.estado == 1 ? "Activo" : "Inactivo";
-                    }
+                    // No rellenar estadoTexto aquí: se eliminó del DTO de listado para evitar exponer texto derivado
                     
                     return lista;
                 }
                 catch (Exception ex)
                 {
-                    System.Console.WriteLine($"Error en ClienteDA.listar(): {ex.Message}");
+                    System.Console.WriteLine($"Error en ClienteDA.listarAll(): {ex.Message}");
                     System.Console.WriteLine($"Query: {sqlQuery}");
                     System.Console.WriteLine($"Connection String: {this.cnBD}");
                     throw;
@@ -201,7 +198,7 @@ namespace Data
             }
         }
 
-        public List<Entity.ClienteBE> listarPorFecha(DateTime? inicio, DateTime? fin, string nombre)
+        public List<Entity.ClienteBE> filtro(DateTime? inicio, DateTime? fin, string nombre)
         {
             var whereClauses = new List<string>();
             var parameters = new DynamicParameters();
@@ -231,16 +228,13 @@ namespace Data
                     sqlCn.Open();
                     var lista = sqlCn.Query<Entity.ClienteBE>(sqlQuery, parameters).ToList();
 
-                    foreach (var cliente in lista)
-                    {
-                        cliente.estadoTexto = cliente.estado == 1 ? "Activo" : "Inactivo";
-                    }
+                    // No rellenar estadoTexto aquí: se eliminó del DTO de listado para evitar exponer texto derivado
 
                     return lista;
                 }
                 catch (Exception ex)
                 {
-                    System.Console.WriteLine($"Error en ClienteDA.listarPorFecha(): {ex.Message}");
+                    System.Console.WriteLine($"Error en ClienteDA.filtro(): {ex.Message}");
                     System.Console.WriteLine($"Query: {sqlQuery}");
                     System.Console.WriteLine($"Connection String: {this.cnBD}");
                     throw;

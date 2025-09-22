@@ -13,7 +13,6 @@ namespace DTO
         public string correo { get; set; }
         public string contacto { get; set; }
         public int estado { get; set; }
-        public string estadoTexto { get; set; }
         public DateTime? fechaCreacion { get; set; }
 
         public ClienteListarDTO()
@@ -28,7 +27,6 @@ namespace DTO
             correo = string.Empty;
             contacto = string.Empty;
             estado = 0;
-            estadoTexto = string.Empty;
             fechaCreacion = null;
         }
     }

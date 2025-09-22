@@ -22,19 +22,19 @@ namespace Service
             cnBD = _configuration.GetConnectionString("cn_bd_sige");
         }
 
-        public List<DTO.ClienteListarDTO> listar()
+        public List<DTO.ClienteListarDTO> listarAll()
         {
             try
             {
                 var clienteDA = new ClienteDA(cnBD);
-                var listaEntity = clienteDA.listar();
+                var listaEntity = clienteDA.listarAll();
                 // Mapear a DTO para no exponer campos de auditoría
                 var listaDto = _mapper.Map<List<DTO.ClienteListarDTO>>(listaEntity);
                 return listaDto;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al listar clientes: {ex.Message}", ex);
+                throw new Exception($"Error al listar todos los clientes: {ex.Message}", ex);
             }
         }
 
@@ -147,18 +147,18 @@ namespace Service
             }
         }
 
-        public List<DTO.ClienteListarDTO> listarPorFecha(DateTime? inicio, DateTime? fin, string nombre)
+        public List<DTO.ClienteListarDTO> filtro(DateTime? inicio, DateTime? fin, string nombre)
         {
             try
             {
                 var clienteDA = new ClienteDA(cnBD);
-                var listaEntity = clienteDA.listarPorFecha(inicio, fin, nombre);
+                var listaEntity = clienteDA.filtro(inicio, fin, nombre);
                 var listaDto = _mapper.Map<List<DTO.ClienteListarDTO>>(listaEntity);
                 return listaDto;
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error al listar clientes por fecha y/o nombre: {ex.Message}", ex);
+                throw new Exception($"Error al aplicar filtro de clientes: {ex.Message}", ex);
             }
         }
     }

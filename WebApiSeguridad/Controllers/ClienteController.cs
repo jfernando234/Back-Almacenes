@@ -29,13 +29,13 @@ namespace WebApiSeguridad.Controllers
         /// Obtiene todos los clientes activos
         /// </summary>
         /// <returns>Lista de clientes</returns>
-        [HttpGet("Listar")]
-        public ActionResult<List<DTO.ClienteListarDTO>> Listar()
+    [HttpGet("ListarAllClientes")]
+    public ActionResult<List<DTO.ClienteListarDTO>> ListarAllClientes()
         {
             try
             {
                 objBss = new Service.ClienteSER(_configuration, mapper);
-                var clientes = objBss.listar();
+                var clientes = objBss.listarAll();
                 return Ok(clientes);
             }
             catch (Exception ex)
@@ -44,16 +44,14 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
-        // El endpoint Obtener por ID fue eliminado según petición del usuario.
-        // Ahora se provee ListarPorFecha para filtrar clientes por rango de fecha de creación.
-
         /// <summary>
-        /// Lista clientes filtrando por fecha de creación (inclusive)
+        /// Filtra clientes por fecha de creación y/o nombre de contacto
         /// </summary>
         /// <param name="inicio">Fecha inicio (yyyy-MM-dd) o datetime válido</param>
         /// <param name="fin">Fecha fin (yyyy-MM-dd) o datetime válido</param>
-        [HttpGet("ListarPorFecha")]
-        public ActionResult<List<DTO.ClienteListarDTO>> ListarPorFecha([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
+        /// <param name="nombre">Nombre de contacto para filtrar (búsqueda parcial)</param>
+    [HttpGet("FiltrarClientes")]
+    public ActionResult<List<DTO.ClienteListarDTO>> FiltrarClientes([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
         {
             try
             {
@@ -62,7 +60,15 @@ namespace WebApiSeguridad.Controllers
 
                 bool tieneInicio = !string.IsNullOrWhiteSpace(inicio);
                 bool tieneFin = !string.IsNullOrWhiteSpace(fin);
+                bool tieneNombre = !string.IsNullOrWhiteSpace(nombre);
 
+                // Validar que se proporcione al menos un criterio de filtro
+                if (!tieneInicio && !tieneFin && !tieneNombre)
+                {
+                    return BadRequest(new { message = "Debe proporcionar al menos un criterio de filtro: fecha (inicio y fin) o nombre." });
+                }
+
+                // Si se proporciona fecha, ambos parámetros son requeridos
                 if (tieneInicio ^ tieneFin)
                 {
                     return BadRequest(new { message = "Si filtras por fecha debes proporcionar ambos parámetros 'inicio' y 'fin'." });
@@ -85,7 +91,7 @@ namespace WebApiSeguridad.Controllers
                 }
 
                 objBss = new Service.ClienteSER(_configuration, mapper);
-                var clientes = objBss.listarPorFecha(tieneInicio ? fechaInicio : (DateTime?)null, tieneFin ? fechaFin : (DateTime?)null, nombre);
+                var clientes = objBss.filtro(tieneInicio ? fechaInicio : (DateTime?)null, tieneFin ? fechaFin : (DateTime?)null, nombre);
                 return Ok(clientes);
             }
             catch (Exception ex)
@@ -99,8 +105,8 @@ namespace WebApiSeguridad.Controllers
         /// </summary>
         /// <param name="clienteDTO">Datos del cliente a crear</param>
         /// <returns>Resultado de la operación</returns>
-        [HttpPost("Crear")]
-        public ActionResult Crear([FromBody] ClienteAgregarDTO clienteDTO)
+    [HttpPost("RegistrarCliente")]
+    public ActionResult RegistrarCliente([FromBody] ClienteAgregarDTO clienteDTO)
         {
             try
             {
@@ -133,56 +139,12 @@ namespace WebApiSeguridad.Controllers
         }
 
         /// <summary>
-        /// Actualiza un cliente existente
-        /// </summary>
-        /// <param name="id">ID del cliente</param>
-        /// <param name="clienteDTO">Datos del cliente a actualizar</param>
-        /// <returns>Resultado de la operación</returns>
-        [HttpPut("Actualizar/{id}")]
-        public ActionResult Actualizar(int id, [FromBody] ClienteModificarDTO clienteDTO)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                if (id != clienteDTO.idCliente)
-                {
-                    return BadRequest(new { message = "El ID del parámetro no coincide con el ID del objeto" });
-                }
-
-                // Agregar datos de auditoría
-                clienteDTO.pcIp = GetClientIP();
-                clienteDTO.pcHost = "web";
-                clienteDTO.idUsuarioLogin = GetCurrentUserId();
-
-                objBss = new Service.ClienteSER(_configuration, mapper);
-                var resultado = objBss.modificar(clienteDTO);
-                
-                if (resultado > 0)
-                {
-                    return Ok(new { message = "Cliente actualizado exitosamente" });
-                }
-                else
-                {
-                    return BadRequest(new { message = "No se pudo actualizar el cliente" });
-                }
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-        }
-
-        /// <summary>
         /// Deshabilita un cliente (eliminación lógica)
         /// </summary>
         /// <param name="id">ID del cliente</param>
         /// <returns>Resultado de la operación</returns>
-        [HttpPut("Deshabilitar/{id}")]
-        public ActionResult Deshabilitar(int id)
+    [HttpPut("EliminarCliente/{id}")]
+    public ActionResult EliminarCliente(int id)
         {
             try
             {

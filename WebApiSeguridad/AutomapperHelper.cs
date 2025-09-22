@@ -51,9 +51,9 @@ namespace WebApiSeguridad
 
             // Mapeos para Cliente
             CreateMap<ClienteBE, ClienteListarDTO>()
-                .ForMember(dest => dest.fechaCreacion, opt => opt.MapFrom(src => src.fechaCreacion))
-                .ForMember(dest => dest.estadoTexto, opt => opt.MapFrom(src => src.estadoTexto));
-            CreateMap<ClienteAgregarDTO, ClienteBE>();
+                .ForMember(dest => dest.fechaCreacion, opt => opt.MapFrom(src => src.fechaCreacion));
+            CreateMap<ClienteAgregarDTO, ClienteBE>()
+                .ForMember(dest => dest.estado, opt => opt.MapFrom(src => 1)); // Activo por defecto
             CreateMap<ClienteModificarDTO, ClienteBE>();
             CreateMap<UsuarioRolDetBE, UsuarioRolDetDTO>().ReverseMap();
             CreateMap<UsuarioRolAgregarDTO, UsuarioRolBE>();

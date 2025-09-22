@@ -1,10 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace DTO
 {
     public class ClienteAgregarDTO : Auditoria
     {
+    [JsonIgnore]
+    public int idCliente { get; set; }
+
         [Required(ErrorMessage = "El tipo de documento es requerido")]
         public int idTipoDocumento { get; set; }
 
@@ -30,8 +34,5 @@ namespace DTO
 
         [StringLength(100, ErrorMessage = "El contacto no puede exceder 100 caracteres")]
         public string contacto { get; set; }
-
-        [Required(ErrorMessage = "El estado es requerido")]
-        public int estado { get; set; } = 1; 
     }
 }
