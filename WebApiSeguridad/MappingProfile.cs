@@ -17,6 +17,11 @@ namespace WebApiSeguridad
             CreateMap<ProveedorAgregarDTO, ProveedorBE>();
             CreateMap<ProveedorModificarDTO, ProveedorBE>();
             CreateMap<ProveedorBE, ProveedorListarDTO>();
+
+            // Producto mappings
+            CreateMap<ProductoAgregarDTO, ProductoBE>();
+            CreateMap<ProductoModificarDTO, ProductoBE>();
+            CreateMap<ProductoBE, ProductoListarDTO>();
         }
     }
 }

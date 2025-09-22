@@ -46,6 +46,7 @@ namespace WebApiSeguridad
                 config.AddMap(new UsuarioPerfilMAP());
                 config.AddMap(new ClienteMAP());
                 config.AddMap(new ProveedorMAP());
+                config.AddMap(new ProductoMAP());
                 //config.AddMap(new UsuarioRolMAP());
             });
 
