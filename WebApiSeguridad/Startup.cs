@@ -24,16 +24,12 @@ namespace WebApiSeguridad
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                // Use the MappingProfile defined in the WebApiSeguridad project
                 mc.AddProfile(new MappingProfile());
+                mc.AddProfile(new AutomapperHelper());
             });
 
             FluentMapper.Initialize(config =>
@@ -47,7 +43,7 @@ namespace WebApiSeguridad
                 config.AddMap(new ClienteMAP());
                 config.AddMap(new ProveedorMAP());
                 config.AddMap(new ProductoMAP());
-                //config.AddMap(new UsuarioRolMAP());
+                config.AddMap(new UsuarioRolMAP());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
@@ -61,7 +57,6 @@ namespace WebApiSeguridad
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
        
