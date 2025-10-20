@@ -28,7 +28,6 @@ namespace DTO
         public string telefono { get; set; }
 
         [StringLength(100, ErrorMessage = "El correo no puede exceder 100 caracteres")]
-        [EmailAddress(ErrorMessage = "El formato del correo no es válido")]
         public string correo { get; set; }
 
         [StringLength(100, ErrorMessage = "El contacto no puede exceder 100 caracteres")]

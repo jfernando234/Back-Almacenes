@@ -29,7 +29,7 @@ namespace WebApiSeguridad
 
             CreateMap<PerfilModuloBE, PerfilModuloDTO>();
             CreateMap<PerfilModuloAgregarDTO, PerfilModuloBE>();
-            CreateMap<PerfilModuloModificarDTO, PerfilModuloBE>();            
+            CreateMap<PerfilModuloModificarDTO, PerfilModuloBE>();
             CreateMap<PerfilModuloDTO, PerfilModuloModificarDTO>();
             CreateMap<EliminarDTO, PerfilModuloBE>();
 
@@ -38,7 +38,7 @@ namespace WebApiSeguridad
             CreateMap<UsuarioPerfilModificarDTO, UsuarioPerfilBE>();
             CreateMap<EliminarDTO, UsuarioPerfilBE>();
 
-            CreateMap < PerfilModuloBE, UsuarioModuloDTO.ModuloAccesoDTO> ();
+            CreateMap<PerfilModuloBE, UsuarioModuloDTO.ModuloAccesoDTO>();
             CreateMap<ModuloDTO, UsuarioModuloDTO>();
 
             CreateMap<RolBE, RolDTO>();
@@ -73,7 +73,7 @@ namespace WebApiSeguridad
             CreateMap<listacuentaBancariaNegDTO, PerfilcuentaBancariaBE>().ReverseMap();
 
 
-            
+
 
             CreateMap<dashboardClienteBE, dashboardClienteDTO>().ReverseMap();
 
@@ -82,6 +82,11 @@ namespace WebApiSeguridad
             CreateMap<ClienteModificarDTO, ClienteBE>();
             CreateMap<ClienteBE, ClienteAgregarDTO>();
             CreateMap<ClienteBE, ClienteModificarDTO>();
+
+            // OrdenCompra mappings
+            CreateMap<OrdenCompraAgregarDTO, OrdenCompraBE>();
+            CreateMap<OrdenCompraModificarDTO, OrdenCompraBE>();
+            CreateMap<OrdenCompraBE, OrdenCompraListarDTO>();
 
         }
 

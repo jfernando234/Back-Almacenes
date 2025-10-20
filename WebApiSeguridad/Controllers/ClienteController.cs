@@ -25,12 +25,12 @@ namespace WebApiSeguridad.Controllers
             this.cnBD = this._configuration.GetConnectionString("cn_bd_sige");
         }
 
-        /// <summary>
-        /// Obtiene todos los clientes activos
-        /// </summary>
-        /// <returns>Lista de clientes</returns>
-    [HttpGet("ListarAllClientes")]
-    public ActionResult<List<DTO.ClienteListarDTO>> ListarAllClientes()
+
+
+
+
+        [HttpGet("ListarAllClientes")]
+        public ActionResult<List<DTO.ClienteListarDTO>> ListarAllClientes()
         {
             try
             {
@@ -44,14 +44,14 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
-        /// <summary>
-        /// Filtra clientes por fecha de creación y/o nombre de contacto
-        /// </summary>
-        /// <param name="inicio">Fecha inicio (yyyy-MM-dd) o datetime válido</param>
-        /// <param name="fin">Fecha fin (yyyy-MM-dd) o datetime válido</param>
-        /// <param name="nombre">Nombre de contacto para filtrar (búsqueda parcial)</param>
-    [HttpGet("FiltrarClientes")]
-    public ActionResult<List<DTO.ClienteListarDTO>> FiltrarClientes([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
+
+
+
+
+
+
+        [HttpGet("FiltrarClientes")]
+        public ActionResult<List<DTO.ClienteListarDTO>> FiltrarClientes([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
         {
             try
             {
@@ -62,13 +62,13 @@ namespace WebApiSeguridad.Controllers
                 bool tieneFin = !string.IsNullOrWhiteSpace(fin);
                 bool tieneNombre = !string.IsNullOrWhiteSpace(nombre);
 
-                // Validar que se proporcione al menos un criterio de filtro
+
                 if (!tieneInicio && !tieneFin && !tieneNombre)
                 {
                     return BadRequest(new { message = "Debe proporcionar al menos un criterio de filtro: fecha (inicio y fin) o nombre." });
                 }
 
-                // Si se proporciona fecha, ambos parámetros son requeridos
+
                 if (tieneInicio ^ tieneFin)
                 {
                     return BadRequest(new { message = "Si filtras por fecha debes proporcionar ambos parámetros 'inicio' y 'fin'." });
@@ -86,7 +86,7 @@ namespace WebApiSeguridad.Controllers
                         return BadRequest(new { message = "Parámetro 'fin' inválido. Use formato yyyy-MM-dd o datetime válido." });
                     }
 
-                    // Ajustar hora de fin para incluir todo el día
+
                     fechaFin = fechaFin.Date.AddDays(1).AddTicks(-1);
                 }
 
@@ -100,13 +100,13 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
-        /// <summary>
-        /// Crea un nuevo cliente
-        /// </summary>
-        /// <param name="clienteDTO">Datos del cliente a crear</param>
-        /// <returns>Resultado de la operación</returns>
-    [HttpPost("RegistrarCliente")]
-    public ActionResult RegistrarCliente([FromBody] ClienteAgregarDTO clienteDTO)
+
+
+
+
+
+        [HttpPost("RegistrarCliente")]
+        public ActionResult RegistrarCliente([FromBody] ClienteAgregarDTO clienteDTO)
         {
             try
             {
@@ -115,14 +115,14 @@ namespace WebApiSeguridad.Controllers
                     return BadRequest(ModelState);
                 }
 
-                // Agregar datos de auditoría
+
                 clienteDTO.pcIp = GetClientIP();
                 clienteDTO.pcHost = "web";
-                clienteDTO.idUsuarioLogin = GetCurrentUserId(); // Implementar según tu sistema de autenticación
+                clienteDTO.idUsuarioLogin = GetCurrentUserId();
 
                 objBss = new Service.ClienteSER(_configuration, mapper);
                 var resultado = objBss.agregar(clienteDTO);
-                
+
                 if (resultado > 0)
                 {
                     return Ok(new { message = "Cliente creado exitosamente", id = resultado });
@@ -138,24 +138,62 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
-        /// <summary>
-        /// Deshabilita un cliente (eliminación lógica)
-        /// </summary>
-        /// <param name="id">ID del cliente</param>
-        /// <returns>Resultado de la operación</returns>
-    [HttpPut("EliminarCliente/{id}")]
-    public ActionResult EliminarCliente(int id)
+
+
+
+
+
+        [HttpPut("ModificarCliente")]
+        public ActionResult ModificarCliente([FromBody] ClienteModificarDTO clienteDTO)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+
+                clienteDTO.pcIp = GetClientIP();
+                clienteDTO.pcHost = "web";
+                clienteDTO.idUsuarioLogin = GetCurrentUserId();
+
+                objBss = new Service.ClienteSER(_configuration, mapper);
+                var resultado = objBss.modificar(clienteDTO);
+
+                if (resultado > 0)
+                {
+                    return Ok(new { message = "Cliente modificado exitosamente" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "No se pudo modificar el cliente" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+
+
+
+
+
+        [HttpPut("EliminarCliente/{id}")]
+        public ActionResult EliminarCliente(int id)
         {
             try
             {
                 objBss = new Service.ClienteSER(_configuration, mapper);
                 var resultado = objBss.deshabilitar(
-                    id, 
-                    GetClientIP(), 
-                    "web", 
+                    id,
+                    GetClientIP(),
+                    "web",
                     GetCurrentUserId()
                 );
-                
+
                 if (resultado > 0)
                 {
                     return Ok(new { message = "Cliente deshabilitado exitosamente" });
@@ -171,10 +209,10 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
-        /// <summary>
-        /// Obtiene la IP del cliente
-        /// </summary>
-        /// <returns>IP del cliente</returns>
+
+
+
+
         private string GetClientIP()
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
@@ -185,15 +223,15 @@ namespace WebApiSeguridad.Controllers
             return ipAddress;
         }
 
-        /// <summary>
-        /// Obtiene el ID del usuario actual (implementar según tu sistema de autenticación)
-        /// </summary>
-        /// <returns>ID del usuario actual</returns>
+
+
+
+
         private int GetCurrentUserId()
         {
-            // TODO: Implementar según tu sistema de autenticación
-            // Por ejemplo, desde JWT token o session
-            return 1; // Por ahora retorna 1 como usuario por defecto
+
+
+            return 1;
         }
     }
 }

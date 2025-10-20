@@ -118,6 +118,38 @@ namespace WebApiSeguridad.Controllers
             }
         }
 
+        [HttpPut("ModificarProveedor")]
+        public ActionResult ModificarProveedor([FromBody] ProveedorModificarDTO dto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                dto.pcIp = GetClientIP();
+                dto.pcHost = "web";
+                dto.idUsuarioLogin = GetCurrentUserId();
+
+                objBss = new Service.ProveedorSER(_configuration, mapper);
+                var resultado = objBss.modificar(dto);
+
+                if (resultado > 0)
+                {
+                    return Ok(new { message = "Proveedor modificado exitosamente" });
+                }
+                else
+                {
+                    return BadRequest(new { message = "No se pudo modificar el proveedor" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         [HttpPut("EliminarProveedor/{id}")]
         public ActionResult EliminarProveedor(int id)
         {
@@ -153,7 +185,7 @@ namespace WebApiSeguridad.Controllers
 
         private int GetCurrentUserId()
         {
-            return 1; 
+            return 1;
         }
     }
 }
