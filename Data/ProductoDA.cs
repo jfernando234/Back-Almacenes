@@ -83,6 +83,7 @@ namespace Data
                     precio_salida = entidad.PrecioSalida,
                     stock = entidad.Stock,
                     estado = entidad.Estado,
+
                     aud_id_usu_cre_n = entidad.idUsuarioLogin,
                     aud_fec_cre_f = DateTime.Now,
                     aud_id_usu_mod_n = entidad.idUsuarioLogin,

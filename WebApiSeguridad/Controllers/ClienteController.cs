@@ -51,7 +51,7 @@ namespace WebApiSeguridad.Controllers
         /// <param name="fin">Fecha fin (yyyy-MM-dd) o datetime válido</param>
         /// <param name="nombre">Nombre de contacto para filtrar (búsqueda parcial)</param>
     [HttpGet("FiltrarClientes")]
-    public ActionResult<List<DTO.ClienteListarDTO>> FiltrarClientes([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
+        public ActionResult<List<DTO.ClienteListarDTO>> FiltrarClientes([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
         {
             try
             {
