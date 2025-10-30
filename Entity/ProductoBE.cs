@@ -25,4 +25,13 @@ namespace Entity
             eliminado = false;
         }
     }
+    public class ProductoT
+    {
+        public string NombreProducto { get; set; }
+        public int Stock { get; set; }
+    }
+    public class ProductoTotal
+    {
+        public int TotalInventario { get; set; }
+    }
 }

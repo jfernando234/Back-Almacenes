@@ -35,7 +35,26 @@ namespace Service
                 throw new Exception($"Error al listar productos: {ex.Message}", ex);
             }
         }
-
+        public DTO.ProductoTotal listarTotal()
+        {
+            try
+            {
+                var da = new ProductoDA(cnBD);
+                var totalEntidad = da.listarTotal();
+                var dto = _mapper.Map<DTO.ProductoTotal>(totalEntidad);
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al listar productos: {ex.Message}", ex);
+            }
+        }
+        public List<DTO.ProductoT> listarStockCritico(int limiteStock = 20)
+        {
+            var da = new ProductoDA(cnBD);
+            var lista = da.listarStockCritico(limiteStock);
+            return _mapper.Map<List<DTO.ProductoT>>(lista);
+        }
         public ProductoBE obtener(int id)
         {
             try

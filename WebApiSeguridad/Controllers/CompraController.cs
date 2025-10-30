@@ -4,38 +4,54 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Service;
 using System;
+using System.Collections.Generic;
 
 namespace WebApiSeguridad.Controllers
 {
-    [Route("api/venta")]
+    [Route("api/compra")]
     [ApiController]
-    public class VentaController : ControllerBase
+    public class CompraController : ControllerBase
     {
         private readonly IConfiguration _configuration;
         private readonly IMapper mapper;
         private readonly string cnBD = "";
-        private ProductoSER objBss;
+        private CompraSer objBss;
 
-        public VentaController(IConfiguration configuration, IMapper mapper)
+        public CompraController(IConfiguration configuration, IMapper mapper)
         {
             this._configuration = configuration;
             this.mapper = mapper;
             this.cnBD = this._configuration.GetConnectionString("cn_bd_sige");
         }
-        [HttpPost("RegistrarVenta")]
-        public ActionResult RegistrarVenta([FromBody] VentaAgregarDTO dto)
+        [HttpGet("ListarCompra")]
+        public ActionResult<List<DTO.CompraListarDTO>> ListarAllProductos()
+        {
+            try
+            {
+                objBss = new CompraSer(_configuration, mapper);
+                var lista = objBss.listarAll();
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        [HttpPost("RegistrarCompra")]
+        public ActionResult RegistrarVenta([FromBody] CompraAgregarDTO dto)
         {
             try
             {
                 if (!ModelState.IsValid)
+                {
                     return BadRequest(ModelState);
-
+                }
                 dto.pcIp = GetClientIP();
                 dto.pcHost = "web";
-                dto.idUsuarioLogin = 1; // aquí tu lógica para obtener usuario logeado
+                dto.idUsuarioLogin = GetCurrentUserId(); // aquí tu lógica para obtener usuario logeado
 
-                var servicio = new VentaSER(_configuration, mapper);
-                var resultado = servicio.Agregar(dto);
+                objBss = new CompraSer(_configuration, mapper);
+                var resultado = objBss.Agregar(dto);
 
                 if (resultado > 0)
                     return Ok(new { message = "Venta registrada exitosamente", id = resultado });
@@ -47,6 +63,7 @@ namespace WebApiSeguridad.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        
         private string GetClientIP()
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();

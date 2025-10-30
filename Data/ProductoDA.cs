@@ -1,4 +1,5 @@
 using Dapper;
+using Entity;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -39,6 +40,34 @@ namespace Data
                     System.Console.WriteLine($"Connection String: {this.cnBD}");
                     throw;
                 }
+            }
+        }
+
+        public ProductoTotal listarTotal()
+        {
+            string sqlQuery = "SELECT SUM(stock) AS TotalInventario " +
+                              "FROM " + bdEsquema + bdTabla + " " +
+                              "WHERE aud_es_eli_b = 0";
+
+            using (SqlConnection sqlCn = new SqlConnection(this.cnBD))
+            {
+                sqlCn.Open();
+                int total = sqlCn.QuerySingle<int>(sqlQuery);
+                return new ProductoTotal { TotalInventario = total };
+            }
+        }
+
+        public List<ProductoT> listarStockCritico(int limiteStock = 20)
+        {
+            string sqlQuery = "SELECT nombre_producto AS NombreProducto , stock " +
+                              "FROM " + bdEsquema + bdTabla + " " +
+                              "WHERE aud_es_eli_b = 0 AND stock <= @limite " +
+                              "ORDER BY stock ASC";
+
+            using (SqlConnection sqlCn = new SqlConnection(this.cnBD))
+            {
+                sqlCn.Open();
+                return sqlCn.Query<ProductoT>(sqlQuery, new { limite = limiteStock }).ToList();
             }
         }
 

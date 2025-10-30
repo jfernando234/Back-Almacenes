@@ -12,4 +12,13 @@ namespace DTO
         public int Estado { get; set; }
         public DateTime FechaRegistro { get; set; }
     }
+    public class ProductoT
+    {
+        public string NombreProducto { get; set; }
+        public int Stock { get; set; }
+    }
+    public class ProductoTotal
+    {
+        public int TotalInventario { get; set; }
+    }
 }

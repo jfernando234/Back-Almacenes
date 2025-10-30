@@ -8,38 +8,21 @@ using System.Threading.Tasks;
 
 namespace DTO
 {
-    public class VentaAgregarDTO
+    public class CompraAgregarDTO
     {
-        
+
         public int TipoDocumentoId { get; set; }
-        public DateTime FechaRegistro { get; set; }
-        public int TipoPagoId { get; set; }
-
-        // Cliente directo
         [Required]
-        public string Dni { get; set; }
+        public string Ruc { get; set; }
         [StringLength(300)]
-        public string NombreCliente { get; set; }
-        [StringLength(300)]
-        public string ApellidosCliente { get; set; }
-        [StringLength(300)]
+        public string RazonSocial { get; set; }
         public string Observacion { get; set; }
-
-        // Métodos de pago
-        public int TipoMetodoPagoId { get; set; }
-        public int? TipoTarjetaId { get; set; }
-
-        public decimal MontoRecibido { get; set; }
-        public decimal Vuelto { get; set; }
-
-        // Totales
-        public decimal SubTotal { get; set; }
-        public decimal Igv { get; set; }
+        public int TipoCompraId { get; set; }
         [Required]
         public decimal Total { get; set; }
 
+        public DateTime FechaRegistro { get; set; }
         // Detalles de productos
-        [Required]
         public List<DetalleVentaDTO> Detalles { get; set; } = new List<DetalleVentaDTO>();
 
         // Auditoría

@@ -87,7 +87,9 @@ namespace WebApiSeguridad
             CreateMap<OrdenCompraAgregarDTO, OrdenCompraBE>();
             CreateMap<OrdenCompraModificarDTO, OrdenCompraBE>();
             CreateMap<OrdenCompraBE, OrdenCompraListarDTO>();
-
+            CreateMap<CompraListBE, CompraListarDTO>();
+            CreateMap<Entity.ProductoTotal, DTO.ProductoTotal>();
+            CreateMap<Entity.ProductoT, DTO.ProductoT>();
         }
 
     }

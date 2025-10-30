@@ -11,44 +11,53 @@ using System.Threading.Tasks;
 
 namespace Service
 {
-    public class VentaSER
+    public class CompraSer
     {
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly string cnBD = "";
 
-        public VentaSER(IConfiguration configuration, IMapper mapper)
+        public CompraSer(IConfiguration configuration, IMapper mapper)
         {
             _configuration = configuration;
             _mapper = mapper;
             cnBD = _configuration.GetConnectionString("cn_bd_sige");
         }
-        public int Agregar(VentaAgregarDTO dto)
+        public List<DTO.CompraListarDTO> listarAll()
         {
             try
             {
-                var da = new VentaDA(cnBD);
+                var da = new CompraDA(cnBD);
+                var lista = da.listarAll();
+                var dto = _mapper.Map<List<DTO.CompraListarDTO>>(lista);
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al listar productos: {ex.Message}", ex);
+            }
+        }
+        public int Agregar(CompraAgregarDTO dto)
+        {
+            try
+            {
+                var da = new CompraDA(cnBD);
 
-                var entidad = new VentaBE
+                //var entidad = _mapper.Map<VentaBE>(dto);
+                
+                var entidad = new CompraBE
                 {
                     TipoDocumentoId = dto.TipoDocumentoId,
-                    FechaRegistro = dto.FechaRegistro,
-                    TipoPagoId = dto.TipoPagoId,
-                    Dni = dto.Dni,
-                    NombreCliente = dto.NombreCliente,
-                    ApellidosCliente = dto.ApellidosCliente,
+                    Ruc = dto.Ruc,
+                    RazonSocial = dto.RazonSocial,
                     Observacion = dto.Observacion,
-                    TipoMetodoPagoId = dto.TipoMetodoPagoId,
-                    TipoTarjetaId = dto.TipoTarjetaId,
-                    MontoRecibido = dto.MontoRecibido,
-                    Vuelto = dto.Vuelto,
-                    SubTotal = dto.SubTotal,
-                    Igv = dto.Igv,
+                    TipoCompraId = dto.TipoCompraId,
                     Total = dto.Total,
+                    FechaRegistro = dto.FechaRegistro,
                     idUsuarioLogin = dto.idUsuarioLogin,
                     pcIp = dto.pcIp,
                     pcHost = dto.pcHost,
-                    Detalles = dto.Detalles.Select(d => new DetalleVentaBE
+                    Detalles = dto.Detalles.Select(d => new DetalleCompraBE
                     {
                         ProductoId = d.ProductoId,
                         Cantidad = d.Cantidad,
@@ -64,5 +73,6 @@ namespace Service
                 throw new Exception($"Error al agregar venta: {ex.Message}", ex);
             }
         }
+        
     }
 }

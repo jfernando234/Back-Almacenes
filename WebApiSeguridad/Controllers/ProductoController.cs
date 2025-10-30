@@ -38,7 +38,35 @@ namespace WebApiSeguridad.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
+        [HttpGet("AllStock")]
+        public ActionResult<DTO.ProductoTotal> AllStockProductos()
+        {
+            try
+            {
+                objBss = new ProductoSER(_configuration, mapper);
+                var total = objBss.listarTotal();
+                return Ok(total);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+        // Controlador
+        [HttpGet("StockCritico")]
+        public ActionResult<List<DTO.ProductoT>> StockCriticoProductos()
+        {
+            try
+            {
+                objBss = new ProductoSER(_configuration, mapper);
+                var lista = objBss.listarStockCritico();
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
         [HttpGet("FiltrarProductos")]
         public ActionResult<List<DTO.ProductoListarDTO>> FiltrarProductos([FromQuery] string inicio, [FromQuery] string fin, [FromQuery] string nombre = "")
         {
