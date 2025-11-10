@@ -13,7 +13,7 @@ namespace Entity
         public string contacto { get; set; }
         public int estado { get; set; }
         public DateTime fechaRegistro { get; set; }
-    public bool eliminado { get; set; }
+        public bool eliminado { get; set; }
 
         public ProveedorBE()
         {
@@ -28,5 +28,11 @@ namespace Entity
             fechaRegistro = DateTime.Now;
             eliminado = false;
         }
+
+    }
+    public class ProductosProveedor
+    {
+        public string Proveedor { get; set; }
+        public int CantidadProductos { get; set; }
     }
 }

@@ -73,6 +73,20 @@ namespace Service
                 throw new Exception($"Error al agregar venta: {ex.Message}", ex);
             }
         }
-        
+        public List<DTO.CompraPorMesDTO> ObtenerComprasPorMes()
+        {
+            try
+            {
+                var da = new CompraDA(cnBD);
+                var lista = da.ObtenerComprasPorMes(); // Lo implementamos en el DA
+                var dto = _mapper.Map<List<DTO.CompraPorMesDTO>>(lista);
+                return dto;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al obtener compras por mes: {ex.Message}", ex);
+            }
+        }
+
     }
 }

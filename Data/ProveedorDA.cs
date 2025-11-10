@@ -1,4 +1,5 @@
 using Dapper;
+using Entity;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -198,5 +199,34 @@ namespace Data
                 }
             }
         }
+        public List<TotalProductos> ObtenerDistribucionComprasPorProducto()
+        {
+            var lista = new List<TotalProductos>();
+            using (var cn = new SqlConnection(this.cnBD))
+            {
+                var query = @"
+                SELECT p.nombre_producto AS NombreProducto, SUM(dc.total) AS Total
+                FROM detalle_compra dc
+                INNER JOIN producto_mae p ON p.pk_prod_id = dc.producto_id
+                GROUP BY p.nombre_producto
+                ORDER BY Total DESC";
+
+                var cmd = new SqlCommand(query, cn);
+                cn.Open();
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new TotalProductos
+                        {
+                            NombreProducto = dr["NombreProducto"].ToString(),
+                            TotalComprado = Convert.ToDecimal(dr["Total"])
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
     }
 }

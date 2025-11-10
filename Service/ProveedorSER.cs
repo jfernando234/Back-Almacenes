@@ -5,6 +5,7 @@ using Entity;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Service
 {
@@ -74,6 +75,34 @@ namespace Service
                 throw new Exception($"Error al agregar proveedor: {ex.Message}", ex);
             }
         }
+        public List<DTO.ProductosComprasDTO> ObtenerDistribucionComprasPorProducto()
+        {
+            var da = new ProveedorDA(_configuration.GetConnectionString("cn_bd_sige"));
+            var listaCompleta = da.ObtenerDistribucionComprasPorProducto(); // devuelve List<DetalleCompraBE>
+
+            // Ordenar por Total descendente
+            var top10 = listaCompleta.OrderByDescending(x => x.TotalComprado).Take(10).ToList();
+            decimal totalOtros = listaCompleta.Skip(10).Sum(x => x.TotalComprado);
+
+            if (totalOtros > 0)
+            {
+                top10.Add(new TotalProductos
+                {
+                    NombreProducto = "Otros",
+                    TotalComprado = totalOtros
+                });
+            }
+
+            // Map manual a DTO
+            var dto = top10.Select(x => new DTO.ProductosComprasDTO
+            {
+                NombreProducto = x.NombreProducto,
+                TotalComprado = x.TotalComprado
+            }).ToList();
+
+            return dto;
+        }
+
 
         public int modificar(ProveedorModificarDTO proveedorDTO)
         {

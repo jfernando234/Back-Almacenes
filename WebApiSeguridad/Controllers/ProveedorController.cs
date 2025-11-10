@@ -172,6 +172,20 @@ namespace WebApiSeguridad.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+        [HttpGet("TopProductos")]
+        public ActionResult<List<DTO.ProductosComprasDTO>> DistribucionComprasPorProductoTop10()
+        {
+            try
+            {
+                objBss = new Service.ProveedorSER(_configuration, mapper);
+                var lista = objBss.ObtenerDistribucionComprasPorProducto();
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
         private string GetClientIP()
         {

@@ -35,6 +35,16 @@ namespace Entity
         public decimal Total { get; set; }
         public DateTime FechaRegistro { get; set; }
     }
-    
 
+    public class CompraListMes
+    {
+        public string Mes { get; set; }
+        public int TotalCompras { get; set; }
+    }
+
+    public class TotalProductos
+    {
+        public string NombreProducto { get; set; }
+        public decimal TotalComprado { get; set; }
+    }
 }

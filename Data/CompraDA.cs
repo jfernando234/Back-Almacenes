@@ -132,6 +132,33 @@ namespace Data
                 }
             }
         }
+        public List<CompraListMes> ObtenerComprasPorMes()
+        {
+            var lista = new List<CompraListMes>();
+            using (var cn = new SqlConnection(this.cnBD))
+            {
+                var query = @"
+                SELECT DATENAME(MONTH, fecha_registro) AS Mes, COUNT(*) AS TotalCompras
+                FROM compra
+                GROUP BY YEAR(fecha_registro), MONTH(fecha_registro), DATENAME(MONTH, fecha_registro)
+                ORDER BY YEAR(fecha_registro), MONTH(fecha_registro)";
+
+                var cmd = new SqlCommand(query, cn);
+                cn.Open();
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new CompraListMes
+                        {
+                            Mes = dr["Mes"].ToString(),
+                            TotalCompras = Convert.ToInt32(dr["TotalCompras"])
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
 
     }
 }

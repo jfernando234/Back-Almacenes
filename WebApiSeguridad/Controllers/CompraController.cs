@@ -63,7 +63,21 @@ namespace WebApiSeguridad.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-        
+        [HttpGet("ComprasPorMes")]
+        public ActionResult<List<DTO.CompraPorMesDTO>> ObtenerComprasPorMes()
+        {
+            try
+            {
+                objBss = new CompraSer(_configuration, mapper);
+                var lista = objBss.ObtenerComprasPorMes(); // método que agregaste en el service
+                return Ok(lista);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
         private string GetClientIP()
         {
             var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
